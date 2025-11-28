@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#ff3f8b">
+  <title>Javelle.co — Do Good, Feel Good</title>
+  <link rel="icon" href="D:/Javelle/logos1.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Abril+Fatface&display=swap" rel="stylesheet">
+  <meta name="color-scheme" content="light dark">
+  <style>
+    :root{
+      --bg-1: #fff0f6;
+      --bg-2: #ffeef6;
+      --accent-pink: #ff3f8b;
+      --accent-pink-2: #e02d75;
+      --muted: #6c6c6c;
+      --card-bg: rgba(255,255,255,0.92);
+      --glass: rgba(255,255,255,0.55);
+      --green:#6da06d;
+      --container: 1100px;
+      --radius:14px;
+      --shadow-1: 0 12px 30px rgba(24,24,24,0.10);
+      --shadow-soft: 0 8px 20px rgba(30,30,30,0.06);
+      --glass-border: rgba(255,255,255,0.6);
+      --focus: 3px solid rgba(255,63,139,0.18);
+      --touch: 48px; /* accessible touch target */
+    }
+
+    /* Base reset */
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:linear-gradient(180deg,var(--bg-1),var(--bg-2)); color:#222;-webkit-font-smoothing:antialiased}
+    img{max-width:100%;display:block;height:auto}
+
+    /* Layout */
+    .wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;padding:28px 14px;position:relative;overflow:hidden}
+    .container{max-width:var(--container);width:100%;}
+
+    /* Decorative blobs */
+    .decor {position:fixed;left:50%;top:0;transform:translateX(-50%);pointer-events:none;z-index:0;mix-blend-mode:screen;opacity:0.9}
+    .blob{position:absolute;border-radius:45% 55% 60% 40%/50% 45% 55% 50%;filter:blur(40px);opacity:0.7}
+    .blob.b1{width:520px;height:520px;background:linear-gradient(135deg,#ffd4ec,#ffd1f0);left:-200px;top:-120px;animation:float1 12s ease-in-out infinite}
+    .blob.b2{width:420px;height:420px;background:linear-gradient(135deg,#fff1de,#fff8ee);right:-160px;top:40px;animation:float2 14s ease-in-out infinite}
+
+    /* Header */
+    header.header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:8px 0;position:relative;z-index:5}
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand img.logo-text{height:72px;object-fit:contain;border-radius:10px}
+
+    /* Navigation - improved for mobile */
+    .nav-wrap{display:flex;align-items:center;gap:12px}
+    .nav{display:flex;gap:12px;align-items:center}
+    .nav button{background:transparent;border:none;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer;color:var(--muted);min-height:var(--touch)}
+    .nav button.active{background:linear-gradient(90deg,var(--accent-pink),var(--accent-pink-2));color:white;box-shadow:0 8px 24px rgba(255,63,139,0.14)}
+
+    .nav-toggle{display:none;background:transparent;border:2px solid rgba(0,0,0,0.06);padding:8px 12px;border-radius:10px;font-weight:800;cursor:pointer}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start;margin-top:18px;position:relative;z-index:4}
+    .hero-card{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.92));border-radius:18px;padding:22px;box-shadow:var(--shadow-1);backdrop-filter:blur(6px);border:1px solid var(--glass-border)}
+    .hero h1{font-family:'Abril Fatface',cursive;font-size:clamp(26px,5.5vw,40px);color:var(--accent-pink);margin:4px 0;line-height:1.05}
+    .tagline{color:var(--green);font-weight:700;font-size:clamp(14px,2.5vw,18px)}
+    .lead{color:var(--muted);line-height:1.6;margin-top:8px;font-size:clamp(14px,2.2vw,16px)}
+    .cta-row{display:flex;gap:12px;margin-top:14px}
+    .btn{background:linear-gradient(180deg,var(--accent-pink),var(--accent-pink-2));color:white;border:none;padding:12px 18px;border-radius:12px;font-weight:800;cursor:pointer;box-shadow:0 10px 30px rgba(255,63,139,0.12);transition:transform .18s ease;min-height:var(--touch)}
+    .btn.secondary{background:transparent;border:2px solid var(--green);color:var(--green);font-weight:700}
+    .btn:active{transform:translateY(2px)}
+
+    /* Hero side */
+    .hero-side{display:flex;flex-direction:column;gap:12px}
+    .mini-card{background:var(--card-bg);padding:12px;border-radius:12px;box-shadow:var(--shadow-soft);display:flex;gap:12px;align-items:center}
+    .mini-card img{width:84px;height:64px;object-fit:cover;border-radius:8px}
+
+    /* Cards */
+    .card{background:var(--card-bg);max-width:920px;width:100%;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-1);margin-top:18px;position:relative;z-index:3}
+    h2{margin:0 0 8px 0;color:#3b3b3b}
+    p{color:var(--muted);line-height:1.6}
+
+    /* Event card */
+    .event-card{display:flex;gap:18px;align-items:flex-start;background:transparent;border-radius:12px;padding:6px}
+    .event-media{flex:0 0 320px;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);cursor:pointer}
+    .event-media img{width:320px;height:200px;object-fit:cover;display:block}
+    .event-content{flex:1;display:flex;flex-direction:column;gap:8px}
+    .event-title{font-family:'Abril Fatface';font-size:22px;color:var(--accent-pink);margin:0}
+    .event-lead{color:var(--muted);font-weight:700}
+    .event-desc{color:var(--muted);line-height:1.6;white-space:pre-line;max-height:0;overflow:hidden;transition:max-height .36s cubic-bezier(.2,.9,.3,1)}
+    .event-desc.open{max-height:800px;padding-top:8px}
+    .event-actions{display:flex;gap:10px;align-items:center;margin-top:auto}
+    .btn.small{padding:8px 12px;font-weight:700;border-radius:10px;min-height:40px}
+
+    /* Founders */
+    .founders{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:12px;align-items:stretch}
+    .founder-card{background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.90));border-radius:12px;padding:14px;display:flex;gap:12px;align-items:center;min-height:140px;box-shadow:var(--shadow-soft);transition:transform .22s cubic-bezier(.2,.9,.3,1),box-shadow .22s,filter .22s;overflow:hidden}
+
+    .founder-card .avatar{flex:0 0 88px;width:88px;height:88px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 22px rgba(0,0,0,0.06);background:linear-gradient(180deg,#fff,#fffaf6)}
+    .founder-card img{width:100%;height:100%;object-fit:cover;border-radius:50%;transition:transform .25s ease}
+
+    .founder-info{flex:1;display:flex;flex-direction:column;gap:6px}
+    .founder-info h3{margin:0;font-size:16px;color:#333}
+    .founder-info .role{margin:0;color:var(--muted);font-weight:700;font-size:13px}
+    .founder-info .bio{margin:0;color:var(--muted);font-size:13px}
+
+    .founder-card .socials{display:flex;gap:8px;margin-top:8px}
+    .founder-card .socials a{font-size:13px;text-decoration:none;padding:6px 8px;border-radius:8px;border:1px solid rgba(0,0,0,0.04);background:rgba(255,255,255,0.6)}
+
+    .founder-card:hover{transform:translateY(-8px);box-shadow:0 26px 44px rgba(0,0,0,0.12);filter:none}
+    .founder-card:hover img{transform:scale(1.06)}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(12,12,12,0.6);display:flex;align-items:center;justify-content:center;padding:22px;z-index:50;opacity:0;pointer-events:none;transition:opacity .18s}
+    .modal.open{opacity:1;pointer-events:auto}
+    .modal .inner{max-width:900px;width:100%;background:linear-gradient(180deg,#fff,#fff);border-radius:12px;padding:12px}
+    .modal img{width:100%;height:auto;border-radius:8px}
+
+    footer{margin-top:28px;padding:18px 0;color:#6b6b6b;text-align:center}
+
+    /* Donate */
+    form.donate{display:flex;flex-direction:column;gap:10px}
+    label{font-weight:700;color:#333;font-size:13px}
+    input[type=text],input[type=number],select{padding:10px;border-radius:10px;border:1px solid #eee;background:transparent}
+    .donate-qr{display:flex;gap:14px;align-items:center}
+
+    /* Focus and reduced motion */
+    :focus{outline:none;box-shadow:var(--focus)}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+    /* Responsive tweaks */
+    @media (max-width:1000px){
+      .founders{grid-template-columns:repeat(2,1fr)}
+      .hero{grid-template-columns:1fr 320px}
+      .event-media img{width:100%;height:220px}
+      .brand img.logo-text{height:60px}
+    }
+
+    @media (max-width:640px){
+      .wrap{padding:18px 12px}
+      .blob.b1{display:none}.blob.b2{display:none}
+      .nav{display:none;position:fixed;right:12px;top:84px;flex-direction:column;padding:12px;background:var(--card-bg);border-radius:12px;box-shadow:var(--shadow-soft);z-index:60;min-width:180px}
+      .nav.open{display:flex}
+      .nav-toggle{display:inline-flex}
+      .brand img.logo-text{height:56px}
+      .hero{grid-template-columns:1fr;gap:12px}
+      .hero-side{flex-direction:row;gap:8px}
+      .mini-card img{width:64px;height:48px}
+      .cta-row{flex-direction:column}
+      .btn{width:100%}
+      .event-card{flex-direction:column}
+      .event-media{flex:0 0 auto;width:100%}
+      .event-media img{width:100%;height:auto}
+      .founders{grid-template-columns:1fr}
+      .founder-card{flex-direction:row;gap:12px;min-height:110px}
+      .modal .inner{height:calc(100vh - 40px);overflow:auto;border-radius:10px}
+      .hero h1{font-size:28px}
+    }
+
+    /* Reveal animation (will be toggled via JS) */
+    .reveal{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:none}
+
+    .qris-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px}
+    .qris-box{background:linear-gradient(180deg,#fff,#fffaf6);padding:18px;border-radius:12px;box-shadow:var(--shadow-soft);display:flex;flex-direction:column;align-items:center;gap:12px}
+  </style>
+</head>
+<body>
+  <div class="decor" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+
+  <div class="wrap">
+    <div class="container">
+      <header class="header">
+        <div class="brand">
+          <a href="https://www.instagram.com/javellecare._?igsh=OXlqdDl4NWNyZW1w" aria-label="Javelle Instagram">
+            <img src="IMG_0120.PNG" alt="javelle.co header logo" class="logo-text"/>
+          </a>
+        </div>
+
+        <div class="nav-wrap">
+          <button id="menuToggle" class="nav-toggle" aria-expanded="false" aria-controls="mainNav">☰</button>
+          <nav id="mainNav" class="nav" role="navigation" aria-label="Main Navigation">
+            <button class="nav-link active" data-target="home">Home</button>
+            <button class="nav-link" data-target="donate">Donasi</button>
+            <button class="nav-link" data-target="about">About</button>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <!-- Hero -->
+        <section class="hero">
+          <div class="hero-card reveal">
+            <h1>Do Good, <span style="color:var(--accent-pink-2)">Feel Good</span></h1>
+            <div class="tagline">Memberdayakan komunitas lewat aksi nyata &amp; transparansi.</div>
+            <p class="lead">Kami adalah platform donasi digital yang fokus pada pencapaian SDG 1 &amp; 2 — Nol Kemiskinan dan Nol Kelaparan. Mulai dari bantuan langsung, edukasi, hingga program pemberdayaan.</p>
+
+            <div class="cta-row">
+              <button class="btn" id="ctaDonate">Donasi Sekarang</button>
+              <button class="btn secondary" id="ctaAbout">Tentang Kami</button>
+            </div>
+
+            <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <div style="font-weight:700;color:var(--muted);">Acara terbaru</div>
+              <div style="background:linear-gradient(90deg,#fff,#fffaf6);padding:6px 10px;border-radius:10px;box-shadow:var(--shadow-soft);font-weight:700;color:#444">Bakti Sosial — Warga Siwalankerto, Surabaya, Jawa Timur</div>
+            </div>
+          </div>
+
+          <aside class="hero-side reveal">
+            <div class="mini-card">
+              <img src="BAKSOS 1.jpeg" alt="Baksos preview"/>
+              <div>
+                <div style="font-weight:800">Bakti Sosial 27 November 2025</div>
+                <div style="font-size:13px;color:var(--muted)">Warga Siwalankerto, Surabaya, Jawa Timur</div>
+              </div>
+            </div>
+
+            <div class="mini-card" style="margin-top:6px">
+              <div style="flex:1">
+                <div style="font-weight:800">QRIS Pembayaran</div>
+                <div style="font-size:13px;color:var(--muted)">Scan untuk donasi cepat</div>
+              </div>
+              <img src="qrcode.jpeg" alt="QRIS" style="width:80px;height:80px;border-radius:10px;object-fit:cover"/>
+            </div>
+          </aside>
+        </section>
+
+        <!-- Home combined pages (keeps the existing data-page approach) -->
+        <section id="homeIntro" class="card page active" data-page="home">
+          <h2 class="reveal">Visi</h2>
+          <p class="reveal">Menjadi platform donasi digital yang memberdayakan masyarakat untuk mencapai Nol Kemiskinan dan Nol Kelaparan (SDG 1 &amp; 2) dengan menjembatani setiap kebutuhan dan sumber daya melalui teknologi yang transparan, akuntabel, dan berdampak nyata.</p>
+
+          <h2 class="reveal" style="margin-top:14px">Misi</h2>
+          <ol class="reveal">
+            <li>Menyediakan bantuan langsung dan darurat bagi kelompok rentan untuk mengatasi kemiskinan.</li>
+            <li>Mengedukasi publik tentang solusi SDG 1 &amp; 2 dan mendorong partisipasi aktif masyarakat.</li>
+            <li>Menciptakan dan mengelola platform donasi digital yang inovatif, aman, dan mudah diakses untuk menjembatani donatur dan penerima manfaat SDG 1 &amp; 2 secara efisien.</li>
+          </ol>
+
+          <div style="display:none">
+            <button class="btn" id="donateBtn2">Donasi Sekarang</button>
+            <button class="btn secondary" id="aboutUs2">About Us</button>
+          </div>
+        </section>
+
+        <section id="homeBaksos" class="card page active" data-page="home" style="margin-top:12px">
+          <!-- Card 1 -->
+          <div class="event-card reveal" tabindex="0" role="button" aria-expanded="false" aria-controls="baksosDesc">
+            <figure class="event-media" aria-hidden="true">
+              <img src="BAKSOS 1.jpeg" alt="Bakti Sosial SD Brawijaya 1" />
+            </figure>
+            <div class="event-content">
+              <h3 class="event-title">Bakti Sosial Pertama – SD Brawijaya 1, Malang, Jawa Timur</h3>
+              <p class="event-lead">Header acara — klik atau tekan Enter untuk melihat deskripsi lengkap.</p>
+
+              <div id="baksosDesc" class="event-desc" aria-hidden="true">
+Bakti sosial pertama kami diadakan di SD Brawijaya 1, Malang, Jawa Timur, sebagai bentuk kepedulian dan kontribusi nyata kepada masyarakat, khususnya anak-anak usia sekolah dasar. Acara ini dirancang untuk memberikan pengalaman yang positif, edukatif, sekaligus menyenangkan bagi para siswa.
+
+Dalam kegiatan ini, tim kami berinteraksi langsung dengan para murid melalui berbagai aktivitas seru yang mengedukasi sekaligus memotivasi. Momen kebersamaan terlihat jelas saat anak-anak menunjukkan antusiasme mereka—mulai dari permainan, pembagian hadiah, hingga sesi foto bersama. Setiap peserta menunjukkan pose percaya diri sebagai simbol semangat, keberanian, dan rasa bangga atas diri mereka.
+
+Melalui program ini, kami berharap dapat memberikan dampak positif bagi perkembangan mental, sosial, dan kepercayaan diri anak-anak di SD Brawijaya 1. Kegiatan ini juga menjadi awal dari komitmen jangka panjang kami untuk terus berbagi, peduli, dan menghadirkan lebih banyak kegiatan sosial di berbagai daerah.
+
+Bakti sosial ini bukan hanya tentang memberi, tetapi juga tentang membangun hubungan, menanamkan nilai kebersamaan, dan menginspirasi generasi muda untuk selalu percaya pada potensi diri mereka.
+              </div>
+
+              <div class="event-actions">
+                <button class="btn small" data-toggle-target="#baksosDesc">Selengkapnya</button>
+                <button class="btn secondary small" data-view-image="BAKSOS 1.jpeg" aria-label="Lihat gambar acara 1">Lihat Gambar</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="event-card reveal" tabindex="0" role="button" aria-expanded="false" aria-controls="baksosDesc2">
+            <figure class="event-media" aria-hidden="true">
+              <img src="Bansos kepada warga Siwalankerto.jpeg" alt="Bakti Sosial Siwalankerto" />
+            </figure>
+            <div class="event-content">
+              <h3 class="event-title">Bakti Sosial kepada warga Siwalankerto, Surabaya Jawa Timur</h3>
+              <p class="event-lead">Header acara — klik atau tekan Enter untuk melihat deskripsi lengkap.</p>
+
+              <div id="baksosDesc2" class="event-desc" aria-hidden="true">
+Kegiatan bakti sosial di Siwalankerto merupakan salah satu bentuk kepedulian kami terhadap masyarakat sekitar, khususnya bagi warga yang membutuhkan dukungan ekstra. Dalam kegiatan ini, tim kami turun langsung ke lingkungan Siwalankerto untuk memberikan bantuan berupa paket kebutuhan pokok, pendidikan, serta kegiatan interaktif bersama anak-anak dan warga.
+
+Program ini tidak hanya berfokus pada pemberian donasi, tetapi juga membangun hubungan yang lebih dekat dengan masyarakat, mendengarkan kebutuhan mereka, serta menciptakan suasana kebersamaan yang hangat. Melalui aksi sosial ini, kami berharap dapat memberikan dampak nyata, meringankan beban warga, sekaligus menumbuhkan semangat gotong royong dan solidaritas antar sesama.
+
+Kegiatan bakti sosial di Siwalankerto ini menjadi langkah awal bagi kami untuk terus menghadirkan kegiatan positif dan bermanfaat bagi masyarakat di berbagai daerah lainnya.
+              </div>
+
+              <div class="event-actions">
+                <button class="btn small" data-toggle-target="#baksosDesc2">Selengkapnya</button>
+                <button class="btn secondary small" data-view-image="Bansos kepada warga Siwalankerto.jpeg" aria-label="Lihat gambar acara 2">Lihat Gambar</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Donate page (QRIS only) -->
+        <section id="donate" class="card page" style="display:none">
+          <h2>Halaman Donasi</h2>
+          <div style="display:grid;grid-template-columns:1fr 320px;gap:18px;margin-top:12px">
+            <div>
+              <!-- QRIS only: removed form inputs to avoid confusion -->
+              <div class="qris-wrap">
+                <div class="qris-box" role="group" aria-label="QRIS Pembayaran">
+                  <img src="qrcode.jpeg" alt="QRIS Pembayaran" style="max-width:320px;width:100%;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08)" />
+                  <div style="margin-top:12px;color:var(--muted);font-weight:700">Scan QR untuk melakukan donasi</div>
+                </div>
+
+                <div style="margin-top:12px;color:var(--muted);font-size:13px">Atau kirim ke rekening: <strong id="accountText">BANK BCA 7855315696</strong></div>
+
+                <div style="display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap">
+                  <button type="button" class="btn" id="copyAccount">Salin Rekening</button>
+                  <button type="button" class="btn secondary" id="backBtn">Kembali</button>
+                </div>
+
+                <div id="copyNotice" style="margin-top:10px;display:none;padding:8px;background:#fff;border-radius:8px;border:1px solid #eee;color:var(--muted)"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- About page -->
+        <section id="about" class="card page" style="display:none">
+          <h2>About Us</h2>
+          <div style="margin-top:12px" class="founders">
+            <div class="founder-card" tabindex="0">
+              <div class="avatar"><img src="JENIS.PNG" alt="Foto Jeanice" /></div>
+              <div class="founder-info">
+                <h3>Jeanice</h3>
+                <p class="role">NRP: B12240049 — Mahasiswa PCU</p>
+                <p class="bio">Koordinator acara & operasional — memastikan semua kegiatan berjalan lancar dan meninggalkan kesan positif bagi peserta.</p>
+                <div class="socials"><a href="#" aria-label="Instagram Jeanice">@jeanice</a></div>
+              </div>
+            </div>
+            <div class="founder-card" tabindex="0">
+              <div class="avatar"><img src="JOCELYN.PNG" alt="Foto Jocelyn" /></div>
+              <div class="founder-info">
+                <h3>Jocelyn</h3>
+                <p class="role">NRP: B12240006 — Mahasiswa PCU</p>
+                <p class="bio">Penanggung jawab komunikasi & dokumentasi — menangkap momen terbaik dan menjaga cerita proyek tetap hidup.</p>
+                <div class="socials"><a href="#" aria-label="Instagram Jocelyn">@jocelyn</a></div>
+              </div>
+            </div>
+            <div class="founder-card" tabindex="0">
+              <div class="avatar"><img src="AVRIL.PNG" alt="Foto Avril" /></div>
+              <div class="founder-info">
+                <h3>Avril</h3>
+                <p class="role">NRP: B12240046 — Mahasiswa PCU</p>
+                <p class="bio">Relawan lapangan & volunteer coordinator — fokus pada hubungan dengan sekolah dan komunitas.</p>
+                <div class="socials"><a href="#" aria-label="Instagram Avril">@avril</a></div>
+              </div>
+            </div>
+            <div class="founder-card" tabindex="0">
+              <div class="avatar"><img src="VANIA.PNG" alt="Foto Vania" /></div>
+              <div class="founder-info">
+                <h3>Vania</h3>
+                <p class="role">NRP: D11240292 — Mahasiswa PCU</p>
+                <p class="bio">Pengelola program & administrasi — memastikan akuntabilitas, jadwal, dan kelancaran program.</p>
+                <div class="socials"><a href="#" aria-label="Instagram Vania">@vania</a></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;text-align:center">
+            <button class="btn secondary" id="backFromAbout">Kembali</button>
+          </div>
+        </section>
+
+      </main>
+
+      <footer>
+        &copy; <strong>javelle.co</strong> — Do good, feel good.
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal / Lightbox -->
+  <div class="modal" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="inner">
+      <button id="closeLightbox" style="float:right;border:none;background:none;font-weight:800;padding:6px 10px;cursor:pointer">✕</button>
+      <img src="" alt="Gambar acara" />
+    </div>
+  </div>
+
+  <script>
+    // Page routing using data-page, keeps history
+    function showPage(id, pushUrl){
+      document.querySelectorAll('.page').forEach(s => { s.style.display='none'; s.classList.remove('active') });
+      const parts = document.querySelectorAll('[data-page="'+id+'"]');
+      if(parts && parts.length){ parts.forEach(p=>{ p.style.display='block'; p.classList.add('active') }) }
+      else { const single = document.getElementById(id); if(single){ single.style.display='block'; single.classList.add('active') }}
+
+      document.querySelectorAll('.nav-link').forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      if(pushUrl) history.pushState({page:id}, '', pushUrl);
+      // collapse mobile nav when navigating
+      document.getElementById('mainNav')?.classList.remove('open');
+      document.getElementById('menuToggle')?.setAttribute('aria-expanded', 'false');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    // Wire navigation
+    document.querySelectorAll('.nav-link').forEach(b => b.addEventListener('click', e=>{ showPage(b.dataset.target, '/'+b.dataset.target); }));
+    document.getElementById('donateBtn2')?.addEventListener('click', ()=> showPage('donate','/donate'));
+    document.getElementById('aboutUs2')?.addEventListener('click', ()=> showPage('about','/about'));
+    document.getElementById('ctaDonate')?.addEventListener('click', ()=> showPage('donate','/donate'));
+    document.getElementById('ctaAbout')?.addEventListener('click', ()=> showPage('about','/about'));
+    document.getElementById('backFromAbout')?.addEventListener('click', ()=> showPage('home','/'));
+
+    // Mobile nav toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+    menuToggle?.addEventListener('click', ()=>{
+      const opened = mainNav.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
+    });
+
+    // Close nav when clicking outside (mobile)
+    document.addEventListener('click', (e)=>{
+      if(window.innerWidth <= 640){
+        if(!e.target.closest('#mainNav') && !e.target.closest('#menuToggle')){
+          mainNav.classList.remove('open');
+          menuToggle.setAttribute('aria-expanded','false');
+        }
+      }
+    });
+
+    // -------------------------
+    // Selengkapnya buttons: per-button safe toggles
+    // -------------------------
+    document.querySelectorAll('[data-toggle-target]').forEach(btn=>{
+      const selector = btn.getAttribute('data-toggle-target');
+      const target = document.querySelector(selector);
+      btn.addEventListener('click', function(e){
+        e.stopPropagation(); // avoid card click
+        if(!target) return;
+        const open = target.classList.toggle('open');
+        target.setAttribute('aria-hidden', !open);
+        // find the closest card and set aria-expanded
+        const card = btn.closest('.event-card');
+        if(card) card.setAttribute('aria-expanded', open);
+        btn.innerText = open ? 'Sembunyikan' : 'Selengkapnya';
+        if(open) target.scrollIntoView({behavior:'smooth', block:'nearest'});
+      });
+    });
+
+    // Clicking on the card toggles its own description (ignore clicks on buttons/links)
+    document.querySelectorAll('.event-card').forEach(card => {
+      card.addEventListener('click', (e)=>{
+        if(e.target.closest('button') || e.target.closest('a') || e.target.closest('input')) return;
+        const desc = card.querySelector('.event-desc');
+        if(!desc) return;
+        const open = desc.classList.toggle('open');
+        desc.setAttribute('aria-hidden', !open);
+        card.setAttribute('aria-expanded', open);
+        const btn = card.querySelector('[data-toggle-target]');
+        if(btn) btn.innerText = open ? 'Sembunyikan' : 'Selengkapnya';
+        if(open) desc.scrollIntoView({behavior:'smooth', block:'nearest'});
+      });
+
+      // keyboard
+      card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); card.click(); } });
+    });
+
+    // -------------------------
+    // Lightbox (reliable): open via data-view-image or clicking thumbnail
+    // -------------------------
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = lightbox.querySelector('img');
+
+    function openLightbox(src, alt){
+      if(!src) return;
+      // set src and alt and open
+      lbImg.src = src;
+      lbImg.alt = alt || 'Gambar acara';
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      // optionally: focus for accessibility
+      lbImg.focus?.();
+    }
+
+    // buttons with data-view-image
+    document.querySelectorAll('[data-view-image]').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const src = btn.getAttribute('data-view-image');
+        const alt = btn.getAttribute('aria-label') || btn.closest('.event-card')?.querySelector('.event-title')?.innerText;
+        openLightbox(src, alt);
+      });
+    });
+
+    // clicking the thumbnail image opens the lightbox too (uses its src)
+    document.querySelectorAll('.event-media img').forEach(img=>{
+      img.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        openLightbox(img.src, img.alt);
+      });
+    });
+
+    // close handlers (reset src to prevent stale image)
+    document.getElementById('closeLightbox')?.addEventListener('click', ()=>{
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden','true');
+      lbImg.src = '';
+    });
+    lightbox.addEventListener('click', (e)=>{
+      if(e.target === lightbox){
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden','true');
+        lbImg.src = '';
+      }
+    });
+    window.addEventListener('keydown', (e)=>{
+      if(e.key==='Escape' && lightbox.classList.contains('open')){
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden','true');
+        lbImg.src = '';
+      }
+    });
+
+    // Copy account to clipboard for donate-only page
+    const copyAccount = document.getElementById('copyAccount');
+    const copyNotice = document.getElementById('copyNotice');
+    if(copyAccount){
+      copyAccount.addEventListener('click', async ()=>{
+        const acc = document.getElementById('accountText')?.innerText || 'BANK ABC 123-456-7890';
+        try{
+          await navigator.clipboard.writeText(acc);
+          if(copyNotice){ copyNotice.textContent = 'Nomor rekening disalin ke clipboard.'; copyNotice.style.display = 'block'; setTimeout(()=> copyNotice.style.display='none', 2500); }
+        }catch(err){
+          if(copyNotice){ copyNotice.textContent = 'Gagal menyalin. Silakan salin manual.'; copyNotice.style.display = 'block'; }
+        }
+      });
+    }
+
+    // IntersectionObserver reveal
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(ent => { if(ent.isIntersecting) ent.target.classList.add('visible'); });
+    }, {threshold:0.08});
+    document.querySelectorAll('.reveal').forEach(node => observer.observe(node));
+
+    // Small parallax / tilt for founder cards (disabled on mobile for performance)
+    function enableParallax(){
+      document.querySelectorAll('.founder-card').forEach(card => {
+        card.addEventListener('mousemove', (e)=>{
+          if(window.innerWidth <= 640) return;
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left)/r.width - 0.5;
+          const py = (e.clientY - r.top)/r.height - 0.5;
+          card.style.transform = `perspective(800px) rotateX(${ -py*6 }deg) rotateY(${ px*8 }deg) translateY(-6px)`;
+        });
+        card.addEventListener('mouseleave', ()=>{ card.style.transform='none' });
+      });
+    }
+    enableParallax();
+
+    // Popstate handling
+    window.addEventListener('popstate', (ev)=>{
+      const page = (ev.state && ev.state.page) || (location.pathname.includes('/donate') ? 'donate' : (location.pathname.includes('/about') ? 'about' : 'home'));
+      showPage(page, null);
+    });
+
+    // Init from path
+    (function initFromPath(){
+      const path = location.pathname;
+      if(path.includes('/donate')){ showPage('donate', null); history.replaceState({page:'donate'}, '', path); }
+      else if(path.includes('/about')){ showPage('about', null); history.replaceState({page:'about'}, '', path); }
+      else { showPage('home', null); history.replaceState({page:'home'}, '', '/'); }
+    })();
+
+    // Accessibility: allow Enter on nav links
+    document.querySelectorAll('.nav-link').forEach(btn=> btn.addEventListener('keydown', e => { if(e.key==='Enter') btn.click(); }));
+
+    // back buttons & route helper
+    document.getElementById('backBtn')?.addEventListener('click', ()=> showPage('home','/'));
+    document.getElementById('backFromAbout')?.addEventListener('click', ()=> showPage('home','/'));
+  </script>
+</body>
+</html>
